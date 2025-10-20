@@ -32,9 +32,9 @@ Calculation::Vector3 Calculation::Normalize(const Vector3& a){
 
 
 void Calculation::VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label){
-		Novice::ScreenPrintf(x, y, "%.02f", vector.x);
-		Novice::ScreenPrintf(x + kColumnWidth, y, "x:%.02f", vector.y);
-		Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%.02f", vector.z);
+		Novice::ScreenPrintf(x, y, "%.03f", vector.x);
+		Novice::ScreenPrintf(x + kColumnWidth, y, "x:%.03f", vector.y);
+		Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%.03f", vector.z);
 		Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", label);
 	}
 Calculation::Matrix4x4 Calculation::Add(const Matrix4x4& a, const Matrix4x4& b)
@@ -794,6 +794,25 @@ Calculation::Matrix4x4 Calculation::MakeRotateAxisAngle(const Vector3& axis, flo
 
 	result.m[0][0] = x * x * omc + c;
 	result.m[0][1] = x * y * omc * z * s;
+	result.m[0][2] = x * z * omc - y * s;
+	result.m[0][3] = 0.0f;
+
+	result.m[1][0] = y * x * omc - z * s;
+	result.m[1][1] = y * y * omc + c;
+	result.m[1][2] = y * z * omc + x * s;
+	result.m[1][3] = 0.0f;
+
+	result.m[2][0] = z * x * omc + y * s;
+	result.m[2][1] = z * y * omc - x * s;
+	result.m[2][2] = z * z * omc + c;
+	result.m[2][3] = 0.0f;
+
+	result.m[3][0] = 0.0f;
+	result.m[3][1] = 0.0f;
+	result.m[3][2] = 0.0f;
+	result.m[3][3] = 1.0f;
+
+	return result;
 }
 
 
