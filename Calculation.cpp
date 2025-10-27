@@ -815,4 +815,27 @@ Calculation::Matrix4x4 Calculation::MakeRotateAxisAngle(const Vector3& axis, flo
 	return result;
 }
 
+Calculation::Matrix4x4 Calculation::DirectionToDirection(const Vector3& from, const Vector3& to) {
+	Vector3 normalizedFrom = Normalize(from);
+	Vector3 normalizedTo = Normalize(to);
+
+	Vector3 rotationAxis = Cross(normalizedFrom, normalizedTo);
+	float cosAngle = Dot(normalizedFrom, normalizedTo);
+
+	float angle = std::acos(std::fmax(-1.0f, std::fmin(1.0f, cosAngle)));
+	if (angle < 0.0001f) {
+		return MakeIdentity4x4();
+	}
+
+	if (angle > (float)M_PI - 0.0001f) {
+		Vector3 arbitraryAxis = Cross(normalizedFrom, { 1.0f, 0.0f, 0.0f });
+		if (Length(arbitraryAxis) < 0.0001f) {
+			arbitraryAxis = Cross(normalizedFrom, { 0.0f, 1.0f, 0.0f });
+		}
+		return MakeRotateAxisAngle(arbitraryAxis, (float)M_PI);
+	}
+	rotationAxis = Normalize(rotationAxis);
+	return MakeRotateAxisAngle(rotationAxis, angle);
+}
+
 

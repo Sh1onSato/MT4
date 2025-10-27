@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <Novice.h>
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <assert.h>
 
@@ -193,6 +194,8 @@ public:
 	void DrawBezier(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, Matrix4x4& viewProjectionMatrix, Matrix4x4& viewportMatrix, uint32_t color);
 
 	Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
+
+	Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
 };
 
 

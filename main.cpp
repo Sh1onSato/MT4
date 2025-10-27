@@ -24,9 +24,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Calculation* calculation = new Calculation();
-	Calculation::Vector3 axis = calculation->Normalize(Calculation::Vector3(1.00f, 1.00f, 1.00f));
-	float angle = 0.440f;
-	Calculation::Matrix4x4 rotateMatrix = calculation->MakeRotateAxisAngle(axis, angle);
+	Calculation::Vector3 from0 = calculation->Normalize(Calculation::Vector3{ 1.0f,0.7f,0.5f });
+	Calculation::Vector3 to0 = from0;
+	Calculation::Vector3 from1 = calculation->Normalize(Calculation::Vector3{ -0.6f,0.9f,0.2f });
+	Calculation::Vector3 to1 = calculation->Normalize(Calculation::Vector3{ 0.4f,0.7f,-0.5f });
+	Calculation::Matrix4x4 rotateMatrix0 = { calculation->DirectionToDirection(calculation->Normalize(Calculation::Vector3{1.0f,0.0f,0.0f}),calculation->Normalize(Calculation::Vector3{-1.0f,0.0f,0.0f})) };
+	Calculation::Matrix4x4 rotateMatrix1 =  calculation->DirectionToDirection(from0,to0);
+	Calculation::Matrix4x4 rotateMatrix2 = calculation->DirectionToDirection(from1, to1);
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -50,7 +54,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		calculation->MatrixScreenPrintf(0, 0, rotateMatrix, "rotateMatrix");
+		calculation->MatrixScreenPrintf(0, 0, rotateMatrix0,"rotateMatrix0");
+		calculation->MatrixScreenPrintf(0, calculation->kRowHeight * 5, rotateMatrix1, "rotateMatrix1");
+		calculation->MatrixScreenPrintf(0, calculation->kRowHeight * 10, rotateMatrix2, "rotateMatrix2");
 		///
 		/// ↑描画処理ここまで
 		///
