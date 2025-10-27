@@ -5,9 +5,6 @@
 #include <algorithm>
 #include<imgui.h>
 #include <iostream>
-#define GLM_ENABLE_EXPERIMENTAL
-#include "glm/glm.hpp"
-#include "glm/gtx/norm.hpp"
 
 
 const char kWindowTitle[] = "LE2D_12_サトウ_シオン";
@@ -24,8 +21,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Calculation* calculation = new Calculation();
+
 	Calculation::Vector3 from0 = calculation->Normalize(Calculation::Vector3{ 1.0f,0.7f,0.5f });
-	Calculation::Vector3 to0 = from0;
+	Calculation::Vector3 to0 = -from0;
 	Calculation::Vector3 from1 = calculation->Normalize(Calculation::Vector3{ -0.6f,0.9f,0.2f });
 	Calculation::Vector3 to1 = calculation->Normalize(Calculation::Vector3{ 0.4f,0.7f,-0.5f });
 	Calculation::Matrix4x4 rotateMatrix0 = { calculation->DirectionToDirection(calculation->Normalize(Calculation::Vector3{1.0f,0.0f,0.0f}),calculation->Normalize(Calculation::Vector3{-1.0f,0.0f,0.0f})) };

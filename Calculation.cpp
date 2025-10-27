@@ -793,7 +793,7 @@ Calculation::Matrix4x4 Calculation::MakeRotateAxisAngle(const Vector3& axis, flo
 	float z = normalizedAxis.z;
 
 	result.m[0][0] = x * x * omc + c;
-	result.m[0][1] = x * y * omc * z * s;
+	result.m[0][1] = x * y * omc + z * s;
 	result.m[0][2] = x * z * omc - y * s;
 	result.m[0][3] = 0.0f;
 
@@ -828,11 +828,25 @@ Calculation::Matrix4x4 Calculation::DirectionToDirection(const Vector3& from, co
 	}
 
 	if (angle > (float)M_PI - 0.0001f) {
-		Vector3 arbitraryAxis = Cross(normalizedFrom, { 1.0f, 0.0f, 0.0f });
-		if (Length(arbitraryAxis) < 0.0001f) {
-			arbitraryAxis = Cross(normalizedFrom, { 0.0f, 1.0f, 0.0f });
+		Vector3 arbitraryAxis;
+		if (std::abs(normalizedFrom.x) < std::abs(normalizedFrom.y)) {
+			if (std::abs(normalizedFrom.x) < std::abs(normalizedFrom.z)) {
+				arbitraryAxis = Cross(normalizedFrom, { 1.0f, 0.0f, 0.0f });
+			}
+			else {
+				arbitraryAxis = Cross(normalizedFrom, { 0.0f, 0.0f, 1.0f });
+			}
 		}
-		return MakeRotateAxisAngle(arbitraryAxis, (float)M_PI);
+		else {
+			if (std::abs(normalizedFrom.y) < std::abs(normalizedFrom.z)) {
+				arbitraryAxis = Cross(normalizedFrom, { 0.0f, 1.0f, 0.0f });
+			}
+			else {
+				arbitraryAxis = Cross(normalizedFrom, { 0.0f, 0.0f, 1.0f });
+			}
+		}
+		return MakeRotateAxisAngle(Normalize(arbitraryAxis), (float)M_PI);
+		
 	}
 	rotationAxis = Normalize(rotationAxis);
 	return MakeRotateAxisAngle(rotationAxis, angle);
